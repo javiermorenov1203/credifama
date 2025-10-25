@@ -39,16 +39,19 @@ body {
 
 .data-form {
     display: grid;
-    gap: 30px;
+    gap: 20px;
 }
 
-.data-form div {
+.input-container {
     display: flex;
+    margin-right: 100px;
+    height: 40px;
 }
 
 .data-input {
     height: 20px;
-    font-size: 14px;
+    width: 185px;
+    font-size: 13px;
     border-radius: 4px;
     border-width: 2px;
     border-style: solid;
@@ -63,16 +66,11 @@ body {
     border-style: none;
     width: 70px;
     height: 20px;
+    margin-left: auto;
 }
 
 .send-btn:hover {
     cursor: pointer;
-}
-
-.data-input,
-.send-btn {
-    margin-left: auto;
-    margin-right: 100px;
 }
 
 .data-card {
@@ -92,4 +90,19 @@ body {
 
 label {
     font-weight: bold;
+}
+
+.field-container {
+   margin-left: auto;
+}
+
+.error-message {
+    color: rgb(223, 0, 0);
+    font-size: 12px;
+    margin: 0;
+    text-align: left;
+}
+
+.input-label {
+    padding-top: 5px;
 }

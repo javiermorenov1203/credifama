@@ -17,20 +17,31 @@
         <div class="bottom-container">
             <div class="left-panel">
                 <h2 class="panel-title">Ingreso de datos</h2>
-                <form action="" class="data-form">
-                    <div>
-                        <label>Nombre*</label>
-                        <input type="text" class="data-input">
+                <form id="data-form" action="index.php" method="post" class="data-form">
+                    <div class="input-container">
+                        <label class="input-label">Nombre*</label>
+                        <div class="field-container">
+                            <input id="name" type="text" name="nombre" class="data-input">
+                            <p id="name-error" class="error-message"></p>
+                        </div>
                     </div>
-                    <div>
-                        <label>Email*</label>
-                        <input type="text" class="data-input">
+                    <div class="input-container">
+                        <label class="input-label">Email*</label>
+                        <div class="field-container">
+                            <input id="email" type="text" class="data-input">
+                            <p id="email-error" class="error-message"></p>
+                        </div>
                     </div>
-                    <div>
-                        <label>Teléfono</label>
-                        <input type="text" class="data-input">
+                    <div class="input-container">
+                        <label class="input-label">Teléfono</label>
+                        <div class="field-container">
+                            <input id="number" type="text" maxlength="9" class="data-input">
+                            <p id="phone-error" class="error-message"></p>
+                        </div>
                     </div>
-                    <input type="submit" value="Enviar" class="send-btn">
+                    <div class="input-container">
+                        <input type="submit" name="enviar" value="Enviar" class="send-btn">
+                    </div>
                 </form>
             </div>
             <span class="panel-separator"></span>
@@ -45,6 +56,8 @@
             </div>
         </div>
     </div>
+
+    <script src="index.js"></script>
 </body>
 
 </html>
