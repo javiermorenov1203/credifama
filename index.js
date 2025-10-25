@@ -30,6 +30,16 @@ function loadUsers() {
         .catch(err => console.log('Error:', err))
 }
 
+function validateInput(input, condition, errorElement, message) {
+    if (condition) {
+        errorElement.textContent = message
+        input.style.borderColor = 'rgba(190, 0, 0, 1)'
+    } else {
+        errorElement.textContent = ""
+        input.style.borderColor = 'rgba(128, 128, 128, 0.73)'
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     loadUsers()
 })
@@ -37,32 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
 form.addEventListener("submit", function (event) {
     event.preventDefault()
 
-    if (nameInput.value.trim() === "") {
-        nameError.textContent = "El nombre es obligatorio"
-        nameInput.style.borderColor = 'rgba(190, 0, 0, 1)'
-    } else {
-        nameError.textContent = ""
-        nameInput.style.borderColor = 'rgba(128, 128, 128, 0.73)'
-    }
-
-    if (emailInput.value.trim() === "") {
-        emailError.textContent = "El email es obligatorio"
-        emailInput.style.borderColor = 'rgba(190, 0, 0, 1)'
-    } else if (!emailRegex.test(emailInput.value.trim())) {
-        emailError.textContent = "El email es inválido"
-        emailInput.style.borderColor = 'rgba(190, 0, 0, 1)'
-    } else {
-        emailError.textContent = ""
-        emailInput.style.borderColor = 'rgba(128, 128, 128, 0.73)'
-    }
-
-    if (!phoneRegex.test(phoneInput.value.trim())) {
-        phoneError.textContent = "El teléfono es inválido"
-        phoneInput.style.borderColor = 'rgba(190, 0, 0, 1)'
-    } else {
-        phoneError.textContent = ""
-        phoneInput.style.borderColor = 'rgba(128, 128, 128, 0.73)'
-    }
+    validateInput(nameInput, nameInput.value.trim() === "", nameError, "El nombre es obligatorio")
+    validateInput(emailInput, emailInput.value.trim() === "", emailError, "El email es obligatorio")
+    validateInput(emailInput, !emailRegex.test(emailInput.value.trim()), emailError, "El email tiene formato inválido")
+    validateInput(phoneInput, !phoneRegex.test(phoneInput.value.trim()), phoneError, "El teléfono es inválido")
 
     if (nameError.textContent !== ""
         || emailError.textContent !== ""
@@ -76,24 +64,11 @@ form.addEventListener("submit", function (event) {
         .then(res => res.json().then(data => ({ status: res.status, body: data })))
         .then(({ status, body }) => {
             if (status === 201) {
-                loadUsers();
                 form.reset();
+                loadUsers();
             } else if (status === 409) {
-                if (body.errors.email) {
-                    emailError.textContent = body.errors.email;
-                    emailInput.style.borderColor = 'rgba(190, 0, 0, 1)'
-                } else {
-                    emailError.textContent = '';
-                    emailInput.style.borderColor = 'rgba(128, 128, 128, 0.73)'
-                }
-
-                if (body.errors.telefono) {
-                    phoneError.textContent = body.errors.telefono;
-                    phoneInput.style.borderColor = 'rgba(190, 0, 0, 1)'
-                } else {
-                    phoneError.textContent = '';
-                    phoneInput.style.borderColor = 'rgba(128, 128, 128, 0.73)'
-                }
+                validateInput(emailInput, body.errors.email, emailError, body.errors.email)
+                validateInput(phoneInput, body.errors.telefono, phoneError, body.errors.telefono)
             }
         })
         .catch(err => console.error('Fetch error:', err));
