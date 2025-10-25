@@ -39,8 +39,22 @@ dataForm.addEventListener("submit", function (event) {
         dataPhone.style.borderColor = 'rgba(128, 128, 128, 0.73)'
     }
 
-     if (nameError === "" && emailError === "" && phoneError === "") {
-        dataForm.reset()
-        dataForm.submit()
+    if (nameError.textContent !== ""
+        || emailError.textContent !== ""
+        || phoneError.textContent !== "") {
+        return
     }
-})
+
+    const formData = new FormData(dataForm);
+
+    fetch("insertar.php", {
+        method: "POST",
+        body: formData
+    })
+        .then(res => res.text())
+        .then(data => {
+            alert(data); // Mensaje del servidor
+            dataForm.reset();
+        })
+        .catch(err => console.error("Error:", err));
+});
