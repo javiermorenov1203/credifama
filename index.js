@@ -7,7 +7,32 @@ const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const phoneInput = document.getElementById("number")
 const phoneError = document.getElementById("phone-error")
 const phoneRegex = /^$|^09[0-9]{7}$/
+const cardContainer = document.getElementById("card-container")
 
+function loadUsers() {
+    fetch("get-users.php")
+        .then(res => res.json())
+        .then(data => {
+            if (data.users && data.users.length > 0) {
+                cardContainer.innerHTML = ""
+                data.users.forEach(user => {
+                    cardContainer.innerHTML += `<div class="data-card">
+                        <span>Nombre: ${user.nombre}</span>
+                        <span>Email: ${user.email}</span>
+                        <span>Teléfono: ${user.telefono ?? 'N/A'}</span>
+                        <span>Ingresado: ${user.fecha_ingreso}</span>
+                    </div>`
+                })
+            } else {
+                cardContainer.innerHTML = `<p>No hay datos para mostrar</p>`
+            }
+        })
+        .catch(err => console.log('Error:', err))
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadUsers()
+})
 
 form.addEventListener("submit", function (event) {
     event.preventDefault()
@@ -51,7 +76,7 @@ form.addEventListener("submit", function (event) {
         .then(res => res.json().then(data => ({ status: res.status, body: data })))
         .then(({ status, body }) => {
             if (status === 201) {
-                alert(body.message); // o mostrar en un div de éxito
+                loadUsers();
                 form.reset();
             } else if (status === 409) {
                 if (body.errors.email) {

@@ -22,8 +22,7 @@ body {
 
 .left-panel,
 .right-panel {
-    width: 400px;
-    
+    width: 450px;
 }
 
 .panel-title {
@@ -50,8 +49,8 @@ body {
 }
 
 .data-input {
-    height: 20px;
-    width: 185px;
+    height: 22px;
+    width: 200px;
     font-size: 13px;
     border-radius: 4px;
     border-width: 2px;
@@ -75,12 +74,13 @@ body {
 }
 
 .data-card {
+    height: 49px;
     font-size: 12px;
     border: #2a1859;
     border-style: solid;
     border-width: 4px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 45% 55%;
     gap: 8px 0px;
     margin: 0px 20px;
     align-items: center;
@@ -107,7 +107,27 @@ label {
     padding-top: 5px;
 }
 
-.card-container {
+#card-container {
     display: grid;
     gap: 10px;
+    max-height: 730px;
+    overflow-y: auto; 
+}
+
+#card-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+#card-container::-webkit-scrollbar-thumb {
+  background-color: rgb(199, 199, 199);
+  border-radius: 4px;
+}
+
+#card-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(172, 170, 170);
+}
+
+#card-container p {
+    font-size: 14px;
+    text-align: center;
 }
