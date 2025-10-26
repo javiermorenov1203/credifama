@@ -48,8 +48,11 @@ form.addEventListener("submit", function (event) {
     event.preventDefault()
 
     validateInput(nameInput, nameInput.value.trim() === "", nameError, "El nombre es obligatorio")
-    validateInput(emailInput, emailInput.value.trim() === "", emailError, "El email es obligatorio")
-    validateInput(emailInput, !emailRegex.test(emailInput.value.trim()), emailError, "El email tiene formato inválido")
+    if (emailInput.value.trim() === "") {
+        validateInput(emailInput, true, emailError, "El email es obligatorio")
+    } else {
+        validateInput(emailInput, !emailRegex.test(emailInput.value.trim()), emailError, "El email tiene formato inválido")
+    }
     validateInput(phoneInput, !phoneRegex.test(phoneInput.value.trim()), phoneError, "El teléfono es inválido")
 
     if (nameError.textContent !== ""
