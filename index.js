@@ -53,9 +53,7 @@ function formatDate(dateStr) {
     return `${dia}-${mes}-${anio} ${horas}:${minutos}:${segundos}`;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadUsers()
-})
+document.addEventListener("DOMContentLoaded", loadUsers);
 
 form.addEventListener("submit", function (event) {
     event.preventDefault()
