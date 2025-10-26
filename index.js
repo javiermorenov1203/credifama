@@ -53,9 +53,8 @@ function formatDate(dateStr) {
     return `${dia}-${mes}-${anio} ${horas}:${minutos}:${segundos}`;
 }
 
-document.addEventListener("DOMContentLoaded", loadUsers);
 
-form.addEventListener("submit", function (event) {
+async function handleSubmit(event) {
     event.preventDefault()
 
     validateInput(nameInput, nameInput.value.trim() === "", nameError, "El nombre es obligatorio")
@@ -73,17 +72,23 @@ form.addEventListener("submit", function (event) {
     }
 
     const formData = new FormData(form);
+    try {
+        const res = await fetch('add-user.php', { method: 'POST', body: formData });
+        const data = await res.json(); 
+        if (res.status === 201) {
+            form.reset();
+            loadUsers();
+        } else if (res.status === 409) {
+            validateInput(emailInput, data.errors.email, emailError, data.errors.email);
+            validateInput(phoneInput, data.errors.telefono, phoneError, data.errors.telefono);
+        }
+    }
+    catch (err) {
+        console.error("Error al enviar formulario:", err);
+    }
+};
 
-    fetch('add-user.php', { method: 'POST', body: formData })
-        .then(res => res.json().then(data => ({ status: res.status, body: data })))
-        .then(({ status, body }) => {
-            if (status === 201) {
-                form.reset();
-                loadUsers();
-            } else if (status === 409) {
-                validateInput(emailInput, body.errors.email, emailError, body.errors.email)
-                validateInput(phoneInput, body.errors.telefono, phoneError, body.errors.telefono)
-            }
-        })
-        .catch(err => console.error('Fetch error:', err));
-});
+document.addEventListener("DOMContentLoaded", loadUsers);
+form.addEventListener("submit", handleSubmit)
+
+
