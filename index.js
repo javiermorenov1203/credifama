@@ -20,7 +20,7 @@ function loadUsers() {
                         <span>Nombre: ${user.nombre}</span>
                         <span>Email: ${user.email}</span>
                         <span>Teléfono: ${user.telefono ?? 'N/A'}</span>
-                        <span>Ingresado: ${user.fecha_ingreso}</span>
+                        <span>Ingresado: ${formatDate(user.fecha_ingreso)}</span>
                     </div>`
                 })
             } else {
@@ -38,6 +38,19 @@ function validateInput(input, condition, errorElement, message) {
         errorElement.textContent = ""
         input.style.borderColor = 'rgba(128, 128, 128, 0.73)'
     }
+}
+
+function formatDate(dateStr) {
+
+    if (!dateStr || typeof dateStr !== "string") return "N/A";
+
+    const [fecha, hora] = dateStr.split(" ");
+    if (!fecha || !hora) return "N/A";
+
+    const [anio, mes, dia] = fecha.split("-");
+    const [horas, minutos, segundos] = hora.split(":");
+
+    return `${dia}-${mes}-${anio} ${horas}:${minutos}:${segundos}`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
 </head>
 
@@ -17,25 +18,25 @@
         <div class="bottom-container">
             <div class="left-panel">
                 <h2 class="panel-title">Ingreso de datos</h2>
-                <form id="data-form" action="index.php" method="post" class="data-form">
+                <form id="data-form" class="data-form" novalidate>
                     <div class="input-container">
                         <label class="input-label">Nombre*</label>
                         <div class="field-container">
-                            <input id="name" type="text" name="nombre" class="data-input">
+                            <input id="name" type="text" name="nombre" class="data-input" maxlength="100">
                             <p id="name-error" class="error-message"></p>
                         </div>
                     </div>
                     <div class="input-container">
                         <label class="input-label">Email*</label>
                         <div class="field-container">
-                            <input id="email" type="text" name="email" class="data-input">
+                            <input id="email" type="email" name="email" class="data-input" maxlength="100">
                             <p id="email-error" class="error-message"></p>
                         </div>
                     </div>
                     <div class="input-container">
                         <label class="input-label">Teléfono</label>
                         <div class="field-container">
-                            <input id="number" type="text" name="telefono" maxlength="9" class="data-input">
+                            <input id="number" type="tel" name="telefono" maxlength="9" class="data-input">
                             <p id="phone-error" class="error-message"></p>
                         </div>
                     </div>
