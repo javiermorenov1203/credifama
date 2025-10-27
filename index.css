@@ -131,6 +131,11 @@ body {
     text-align: center;
 }
 
+#form-error-message {
+    text-align: center;
+    margin-top: 10px;
+}
+
 @media (max-width: 950px) {
     .left-panel,
     .right-panel {

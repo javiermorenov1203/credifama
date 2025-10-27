@@ -69,16 +69,17 @@ try {
     $stmt->bind_param("sss", $nombre, $email, $telefono);
     $stmt->execute();
 
-    http_response_code(201); // Created
+    $lastId = $conn->insert_id;
+    $result = $conn->query("SELECT * FROM users WHERE id = $lastId");
+    $user = $result->fetch_assoc();
+
+    http_response_code(201);
     echo json_encode([
         'success' => true,
         'message' => 'Usuario creado correctamente',
-        'user' => [
-            'nombre' => $nombre,
-            'email' => $email,
-            'telefono' => $telefono
-        ]
+        'user' => [$user]
     ]);
+    $stmt->close();
 
 } catch (mysqli_sql_exception $e) {
     http_response_code(500); 
@@ -89,6 +90,5 @@ try {
     ]);
 }
 
-$stmt->close();
 $conn->close();
 ?>

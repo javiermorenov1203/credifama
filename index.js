@@ -12,11 +12,13 @@ const cardContainer = document.getElementById("card-container")
 /**
  * Cargar datos en HTML de listado de datos
  */
-function loadUsers() {
-    fetch("get-users.php")
-        .then(res => res.json())
-        .then(data => {
-            if (data.users && data.users.length > 0) {
+async function loadUsers() {
+    try {
+        const res = await fetch("get-users.php")
+        const data = await res.json()
+
+        if (res.status === 200) {
+            if (data.users.length > 0) {
                 cardContainer.innerHTML = ""
                 data.users.forEach(user => {
                     cardContainer.innerHTML += `<div class="data-card">
@@ -29,9 +31,14 @@ function loadUsers() {
             } else {
                 cardContainer.innerHTML = `<p>No hay datos para mostrar</p>`
             }
-        })
-        .catch(err => console.log('Error:', err))
-}
+        } else if (res.status === 500) {
+            cardContainer.innerHTML = `<p>Ha ocurrido un error al obtener los datos</p>`
+        }
+    }
+    catch (err) {
+        console.log('Error:', err)
+    }
+};
 
 /**
  * Validar input en base a condicion de error. Si se cumple la condicion de error, 
@@ -43,11 +50,11 @@ function loadUsers() {
  */
 function validateInput(input, condition, errorElement, message) {
     if (condition) {
-        errorElement.textContent = message
         input.style.borderColor = 'rgba(190, 0, 0, 1)'
+        errorElement.textContent = message
     } else {
-        errorElement.textContent = ""
         input.style.borderColor = 'rgba(128, 128, 128, 0.73)'
+        errorElement.textContent = ""
     }
 }
 
@@ -96,15 +103,18 @@ async function handleSubmit(event) {
     const formData = new FormData(form);
     try {
         const res = await fetch('add-user.php', { method: 'POST', body: formData });
-        const data = await res.json(); 
+        const data = await res.json();
         if (res.status === 201) {
             form.reset();
             loadUsers();
 
-        // Si encuentro errores por datos que ya estan ingresados, muestro mensajes de error
+            // Si encuentro errores por datos que ya estan ingresados, muestro mensajes de error
         } else if (res.status === 409) {
             validateInput(emailInput, data.errors.email, emailError, data.errors.email);
             validateInput(phoneInput, data.errors.telefono, phoneError, data.errors.telefono);
+        }
+        else if (res.status === 500) {
+            document.getElementById("form-error-message").textContent = "Ha ocurrido un error al enviar el formulario"
         }
     }
     catch (err) {
