@@ -12,6 +12,7 @@ $errors = [
     'telefono' => null
 ];
 
+// valido inputs
 if ($nombre === '') {
     $errors['nombre'] = 'El nombre es obligatorio';
 }
@@ -30,13 +31,14 @@ if (!preg_match($regex_telefono, $telefono)) {
     $errors['telefono'] = 'El telefono tiene un formato inválido';
 }
 
+// si algun campo es invalido, detengo insert
 if (!empty(array_filter($errors))) {
     http_response_code(400);
     echo json_encode(['success' => false, 'errors' => array_filter($errors)]);
     exit;
 }
 
-// Antes de insertar, valido si ya existe mail y telefono
+// antes de insertar, valido si ya existe mail y telefono en BD
 $checkStmt = $conn->prepare("SELECT email, phone FROM users WHERE email = ? OR phone = ?");
 $checkStmt->bind_param("ss", $email, $telefono);
 $checkStmt->execute();
@@ -52,7 +54,7 @@ while ($row = $result->fetch_assoc()) {
 }
 
 if (!empty(array_filter($errors))) {
-    http_response_code(409); // Conflict
+    http_response_code(409);
     echo json_encode(['success' => false, 'errors' => array_filter($errors)]);
     $checkStmt->close();
     $conn->close();

@@ -9,6 +9,9 @@ const phoneError = document.getElementById("phone-error")
 const phoneRegex = /^$|^09[0-9]{7}$/
 const cardContainer = document.getElementById("card-container")
 
+/**
+ * Cargar datos en HTML de listado de datos
+ */
 function loadUsers() {
     fetch("get-users.php")
         .then(res => res.json())
@@ -30,6 +33,14 @@ function loadUsers() {
         .catch(err => console.log('Error:', err))
 }
 
+/**
+ * Validar input en base a condicion de error. Si se cumple la condicion de error, 
+ * se colorea el borde de rojo y se muestra mensaje de error.
+ * @param input input HTML a validar
+ * @param condition booleano, condicion de error que se quiere validar
+ * @param errorElement elemento HTML en donde se muestra mensaje de error
+ * @param message string, mensaje de error a mostrar
+ */
 function validateInput(input, condition, errorElement, message) {
     if (condition) {
         errorElement.textContent = message
@@ -40,6 +51,11 @@ function validateInput(input, condition, errorElement, message) {
     }
 }
 
+/**
+ * Formatear la fecha recibida desde BD
+ * @param dateStr string, fecha en formato AAAA-MM-DD hh:mm:ss
+ * @returns string, fecha en formato DD-MM-AAAA hh:mm:ss
+ */
 function formatDate(dateStr) {
 
     if (!dateStr || typeof dateStr !== "string") return "N/A";
@@ -53,10 +69,15 @@ function formatDate(dateStr) {
     return `${dia}-${mes}-${anio} ${horas}:${minutos}:${segundos}`;
 }
 
-
+/**
+ * Envio de datos del formulario
+ * @param event evento submit
+ * @returns se detiene el envio en caso de encontrar errores
+ */
 async function handleSubmit(event) {
     event.preventDefault()
 
+    // Valido inputs
     validateInput(nameInput, nameInput.value.trim() === "", nameError, "El nombre es obligatorio")
     if (emailInput.value.trim() === "") {
         validateInput(emailInput, true, emailError, "El email es obligatorio")
@@ -65,6 +86,7 @@ async function handleSubmit(event) {
     }
     validateInput(phoneInput, !phoneRegex.test(phoneInput.value.trim()), phoneError, "El teléfono es inválido")
 
+    // Si algun campo es invalido, detengo envio
     if (nameError.textContent !== ""
         || emailError.textContent !== ""
         || phoneError.textContent !== "") {
@@ -78,6 +100,8 @@ async function handleSubmit(event) {
         if (res.status === 201) {
             form.reset();
             loadUsers();
+
+        // Si encuentro errores por datos que ya estan ingresados, muestro mensajes de error
         } else if (res.status === 409) {
             validateInput(emailInput, data.errors.email, emailError, data.errors.email);
             validateInput(phoneInput, data.errors.telefono, phoneError, data.errors.telefono);

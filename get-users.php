@@ -7,7 +7,7 @@ try {
     $result = $conn->query($sql);
 
     $users = [];
-    // output data of each row
+
     while ($row = $result->fetch_assoc()) {
         $users[] = [
             "id" => $row["id"],
@@ -23,11 +23,6 @@ try {
     http_response_code(500);
     echo json_encode(['error' => 'Ha ocurrido un erorr al obtener los datos', 'details' => $e->getMessage()]);
 }
-
-
-
-
-
 
 $conn->close();
 ?>
